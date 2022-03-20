@@ -1,5 +1,3 @@
-:global int turbo.cycles.max
-:global int turbo.cycles
 :global int leon.adventure.target_pos
 
 :local int curPos

@@ -23,7 +23,7 @@ stepCount = 0
 path=leon.adventure.path
 loop:
 goto(ternary.int(stepCount>=len(path),end,ternary.int(\
-		{getCurrentEntity} == "Door",door,\
+		{getCurrentEntity} == "Door"||{getCurrentEntity} == "Chest",door,\
 	ternary.int({getCurrentEntity} == "Rock",rock,nextTile))))
 rock:
 	path = {insert(path,stepCount,\

@@ -1,6 +1,4 @@
 :global double leon.adventure.delay
-:global int turbo.cycles.max
-:global int turbo.cycles
 
 :local int curPos
 :local int enemyCount
@@ -21,7 +19,6 @@
 start:
 curPos=0
 executesync("turbo start")
-turbo.cycles.max = max(turbo.cycles.max, turbo.cycles + 2000)
 loop1:
     gotoif(none,false==adventure.isEnemy({posToVec(curPos)}))
     enemyCount += 1

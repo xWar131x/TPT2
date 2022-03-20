@@ -20,8 +20,8 @@
     )))    
 #rotateLeft(x) ternary.string({x}=="U","L",ternary.string({x}=="L","D",ternary.string({x}=="D","R","U")))
 
-executesync("leon.adventure:farm keys")
 executesync("leon.adventure:kill enemies")
+executesync("leon.adventure:farm keys")
 executesync("leon.adventure:find loot")
 leon.adventure.room_direction = ternary.string( \
 	{cur_difficulty}==0 && len(leon.adventure.room_direction)>0,{rotateLeft(leon.adventure.room_direction)}\

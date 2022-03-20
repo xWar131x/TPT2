@@ -9,7 +9,8 @@
 start:
 curPos=d2i(x(adventure.playerPos()))+a.i(19,"*",d2i(y(adventure.playerPos())))
 gotoif(end, adventure.keys() > 10 || (((curPos != 9) && (curPos != 189)) && ((curPos != 171) && (curPos!=351))))
-executesync("leon.adventure:kill enemies")
 adventure.move({move(ternary.string(curPos==9,"D",ternary.string(curPos==171,"L",ternary.string(curPos==189,"R","U"))))})
+wait(leon.adventure.delay)
+executesync("leon.adventure:kill enemies")
 goto(start)
 end:
