@@ -1,12 +1,18 @@
-:global string leon.adventure.room_direction
 :global double leon.adventure.delay
-:global int leon.adventure.target_difficulty
+:global string leon.adventure.room_direction
+:global int leon.adventure.target_pos
+:global string leon.adventure.path
 
 
 key.r()
 
 isopen("arcade")
 leon.adventure.delay = 0.2 ;no boots 0.1 for boots
+gis("<size=0>leon.adventure",0)
+leon.adventure.room_direction = ""
+leon.adventure.target_pos = 0
+leon.adventure.path = ""
+gss("---Stop hiding---", "</size=0>")
 loop:
 executesync("leon.adventure:clear room")
 goto(loop)
