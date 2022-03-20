@@ -1,0 +1,47 @@
+:global string leon.adventure.path
+
+:local string path
+:local int curPos
+:local int stepCount
+
+
+#goRight a.i(curPos,"+",1)
+#goLeft a.i(curPos,"-",1)
+#goUp a.i(curPos,"+",19)
+#goDown a.i(curPos,"-",19)
+#nextField(d) ternary.int({d}=="U",{goUp},ternary.int({d}=="D",{goDown},ternary.int({d}=="R",{goRight},{goLeft})))
+#curDirection sub(path,stepCount,1)
+#insert(st,i,val) concat(concat(sub({st},0,{i}),{val}),sub({st},{i},len({st})-{i}))
+#inverse(d) ternary.string({d}=="U","D",ternary.string({d}=="D","U",\
+	ternary.string({d}=="R","L","R")))
+#posToVec(x) vec(i2d({x}%19),i2d({x}/19))
+#getCurrentEntity adventure.entityType({posToVec({nextField({curDirection})})})
+
+start:
+curPos=d2i(x(adventure.playerPos()))+a.i(19,"*",d2i(y(adventure.playerPos())))
+stepCount = 0
+path=leon.adventure.path
+loop:
+goto(ternary.int(stepCount>=len(path),end,ternary.int(\
+		{getCurrentEntity} == "Door",door,\
+	ternary.int({getCurrentEntity} == "Rock",rock,nextTile))))
+rock:
+	path = {insert(path,stepCount,\
+    	concat(concat(concat(concat(concat(\
+        "B",{inverse(sub(path,a.i(stepCount,"-",1),1))}),\
+        {inverse(sub(path,a.i(stepCount,"-",2),1))}),\
+        "W"),\
+        sub(path,a.i(stepCount,"-",1),1)),\
+        sub(path,a.i(stepCount,"-",2),1)))}
+	stepCount+=6
+	goto(nextTile)
+door:
+	path={insert(path,stepCount,{curDirection})}
+    stepCount+=1
+nextTile:
+	curPos={nextField({curDirection})}
+    stepCount+=1
+    goto(loop)
+end:
+	leon.adventure.path = path
+    

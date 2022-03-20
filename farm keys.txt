@@ -1,0 +1,15 @@
+:global double leon.adventure.delay
+
+:local int curPos
+
+#xMove(d) ternary.double({d}=="L",-1.,ternary.double({d}=="R",1.,0.))
+#yMove(d) ternary.double({d}=="U",1.,ternary.double({d}=="D",-1.,0.))
+#move(d) vec({xMove({d})},{yMove({d})})
+
+start:
+curPos=d2i(x(adventure.playerPos()))+a.i(19,"*",d2i(y(adventure.playerPos())))
+gotoif(end, adventure.keys() > 10 || (((curPos != 9) && (curPos != 189)) && ((curPos != 171) && (curPos!=351))))
+executesync("leon.adventure:kill enemies")
+adventure.move({move(ternary.string(curPos==9,"D",ternary.string(curPos==171,"L",ternary.string(curPos==189,"R","U"))))})
+goto(start)
+end:

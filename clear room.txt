@@ -1,0 +1,39 @@
+:global string leon.adventure.room_direction
+:global int leon.adventure.target_pos
+:global double leon.adventure.delay
+
+#xMove(d) ternary.double({d}=="L",-1.,ternary.double({d}=="R",1.,0.))
+#yMove(d) ternary.double({d}=="U",1.,ternary.double({d}=="D",-1.,0.))
+#move(d) vec({xMove({d})},{yMove({d})})
+
+
+#abs(x) ternary.int({x}>=0,{x},0-{x})
+#room_x d2i(x(adventure.roomCoords()) - 127.0)
+#room_y d2i(y(adventure.roomCoords()) - 127.0)
+#difficulty(x,y) {abs({x})} + {abs({y})}
+#cur_difficulty {difficulty({room_x},{room_y})}
+#nextRoomLower ternary.string(\
+	{room_x} < 0 && {room_y} >=0,"R",ternary.string(\
+    {room_x} >=0 && {room_y} >0,"D",ternary.string( \
+    {room_x} >0 && {room_y} <=0,"L",\
+    "U" \
+    )))    
+#rotateLeft(x) ternary.string({x}=="U","L",ternary.string({x}=="L","D",ternary.string({x}=="D","R","U")))
+
+executesync("leon.adventure:farm keys")
+executesync("leon.adventure:kill enemies")
+executesync("leon.adventure:find loot")
+leon.adventure.room_direction = ternary.string( \
+	{cur_difficulty}==0 && len(leon.adventure.room_direction)>0,{rotateLeft(leon.adventure.room_direction)}\
+    ,ternary.string(i2d(adventure.playerAttack()) >= round(i2d({cur_difficulty}+1)*0.38+1.)+round(i2d({cur_difficulty}+1)*0.08) \
+    || i2d(adventure.playerArmor()) >= ceil(i2d({cur_difficulty}+1)*0.39) \
+    ,{rotateLeft({nextRoomLower})},{nextRoomLower}))
+
+leon.adventure.target_pos = ternary.int(leon.adventure.room_direction=="U",351,\
+	ternary.int(leon.adventure.room_direction=="L",171,\
+    ternary.int(leon.adventure.room_direction=="R",189,9)))
+executesync("leon.adventure:find path")
+executesync("leon.adventure:follow path")
+adventure.move({move(leon.adventure.room_direction)})
+wait(leon.adventure.delay)
+end:

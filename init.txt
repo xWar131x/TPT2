@@ -1,0 +1,16 @@
+:global string leon.adventure.room_direction
+:global double leon.adventure.delay
+:global int leon.adventure.target_difficulty
+
+
+key.r()
+
+isopen("arcade")
+leon.adventure.delay = 0.1 ;no boots 0.1 for boots
+loop:
+executesync("leon.adventure:clear room")
+goto(loop)
+
+
+
+

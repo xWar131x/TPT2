@@ -1,0 +1,29 @@
+:global string leon.adventure.path
+:global double leon.adventure.delay
+
+:local int stepCount
+
+#nextDirection sub(leon.adventure.path,stepCount,1)
+#xMove(d) ternary.double({d}=="L",-1.,ternary.double({d}=="R",1.,0.))
+#yMove(d) ternary.double({d}=="U",1.,ternary.double({d}=="D",-1.,0.))
+#move(d) vec({xMove({d})},{yMove({d})})
+#nextMove {move({nextDirection})}
+#inverse(d) ternary.string({d}=="U","D",ternary.string({d}=="D","U",\
+	ternary.string({d}=="R","L","R")))
+
+start:
+    goto((ternary.int({nextDirection}=="B",dropBomb,ternary.int({nextDirection}=="W",wait,move))))
+move:
+    adventure.move({nextMove})
+delay:
+    stepCount += 1;
+    wait(leon.adventure.delay)
+    goto(ternary.int(len(leon.adventure.path)>stepCount,start,end))
+dropBomb:
+	adventure.placeBomb()
+    goto(delay)
+wait:
+	adventure.wait()
+    goto(delay)
+end:
+	wait(0.0)

@@ -1,0 +1,62 @@
+:global int turbo.cycles.max
+:global int turbo.cycles
+:global int leon.adventure.target_pos
+
+:local int curPos
+:local string queue
+:local string lookedTheoretically
+:local string checkedPhysically
+
+#posToVec(x) vec(i2d({x}%19),i2d({x}/19))
+#getCurrentEntity adventure.entityType({posToVec(curPos)})
+#posToString(p) concat(concat(ternary.string(len(i2s({p}))==1,"00",\
+	ternary.string(len(i2s({p}))==2,"0","")),i2s({p})),":")
+#firstElement s2i(sub(queue,0,3),-1)
+#pop queue=sub(queue,4,a.i(len(queue),"-",4))
+#goRight a.i(curPos,"+",1)
+#goLeft a.i(curPos,"-",1)
+#goUp a.i(curPos,"+",19)
+#goDown a.i(curPos,"-",19)
+#distance(x,y) ({x}%19)-({y}%19)+({x}/19)-({y}/19)
+start:
+executesync("turbo start")
+queue = {posToString(d2i(x(adventure.playerPos()))+a.i(19,"*",d2i(y(adventure.playerPos()))))}
+lookedTheoretically=""
+loop1:
+    curPos={firstElement}
+    {pop}
+    gotoif(foundChest,{getCurrentEntity}=="Chest"&& \
+    	false == contains(checkedPhysically,{posToString(curPos)}))
+    queue= concat(queue,concat(concat(concat(\
+    	ternary.string(false == adventure.isWall({posToVec({goUp})}) && \
+        	false == contains(queue,{posToString({goUp})}) && \
+            false == contains(lookedTheoretically,{posToString({goUp})})&&\
+            {goUp}<361,\
+           	{posToString({goUp})},""),\
+        ternary.string(false == adventure.isWall({posToVec({goDown})}) && \
+        	false == contains(queue,{posToString({goDown})}) && \
+            false == contains(lookedTheoretically,{posToString({goDown})})&& \
+            {goDown}>=0,\
+           	{posToString({goDown})},"")) ,\
+        ternary.string(false == adventure.isWall({posToVec({goRight})}) && \
+        	false == contains(queue,{posToString({goRight})}) && \
+            false == contains(lookedTheoretically,{posToString({goRight})})&&\
+            {distance({goRight},curPos)}<=1,\
+           	{posToString({goRight})},"")),\
+        ternary.string(false == adventure.isWall({posToVec({goLeft})}) && \
+        	false == contains(queue,{posToString({goLeft})}) && \
+            false == contains(lookedTheoretically,{posToString({goLeft})})&&\
+            {distance({goLeft},curPos)}<=1,\
+           	{posToString({goLeft})},"")))
+    lookedTheoretically = concat(lookedTheoretically,{posToString(curPos)})
+  goto(ternary.int(len(queue)>0,loop1,end))
+foundChest:
+    checkedPhysically = concat(checkedPhysically,{posToString(curPos)})
+    executesync("turbo stop")
+    leon.adventure.target_pos = curPos
+    executesync("leon.adventure:find path")
+    executesync("leon.adventure:follow path")
+    goto(start)
+end:
+executesync("turbo stop")
+wait(0.)

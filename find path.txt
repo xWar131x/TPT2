@@ -1,0 +1,70 @@
+:global string leon.adventure.path
+:global int leon.adventure.target_pos
+:global int turbo.cycles.max
+:global int turbo.cycles
+
+:local string direction
+:local string lastDirection
+:local int curPos
+:local int visiting
+:local int reverse
+:local string path
+:local string visited
+
+#goRight a.i(curPos,"+",1)
+#goLeft a.i(curPos,"-",1)
+#goUp a.i(curPos,"+",19)
+#goDown a.i(curPos,"-",19)
+#rotateLeft(x) ternary.string({x}=="U","L",ternary.string({x}=="L","D",ternary.string({x}=="D","R","U")))
+#inverse(d) ternary.string({d}=="U","D",ternary.string({d}=="D","U",\
+	ternary.string({d}=="R","L","R")))
+#nextField(d) ternary.int({d}=="U",{goUp},ternary.int({d}=="D",{goDown},ternary.int({d}=="R",{goRight},{goLeft})))
+#nextDirection ternary.string(lastDirection=="U","R",\
+	ternary.string(lastDirection=="R","D",\
+    ternary.string(lastDirection=="D","L","U")))
+#distance(x,y) ({x}%19)-({y}%19)+({x}/19)-({y}/19)
+#lastStep sub(path,a.i(len(path),"-",1),1)
+#posToString(p) concat(":",concat(i2s({p}),":"))
+
+start:
+curPos = d2i(x(adventure.playerPos()))+a.i(19,"*",d2i(y(adventure.playerPos())))
+visited={posToString(curPos)}
+executesync("turbo start")
+turbo.cycles.max = max(turbo.cycles.max, turbo.cycles + 2000)
+loop:
+gotoif(end,curPos==leon.adventure.target_pos)
+direction = {nextDirection}
+visiting = ternary.int(\
+	false==adventure.isWall(vec(i2d({nextField(direction)}%19),i2d({nextField(direction)}/19)))\
+    && false==contains(visited,{posToString({nextField(direction)})}) \
+    && {distance(curPos,{nextField(direction)})} <= 1 \
+    && {nextField(direction)} >= 0 && {nextField(direction)} < 361 \
+	,1,0)
+reverse = ternary.int(len(path) > 0 && {inverse(direction)}=={lastStep},1,0)
+path=ternary.string(reverse==1,sub(path,0,a.i(len(path),"-",1)),\
+	ternary.string(visiting==1,concat(path,direction),path))
+visited = ternary.string(visiting==1 \
+	&& false == contains(visited,{posToString({nextField(direction)})}),\
+	concat(visited,{posToString({nextField(direction)})}),visited)
+lastDirection = ternary.string(visiting==1||reverse==1,direction,{inverse(direction)})
+curPos=ternary.int(visiting==1 || reverse==1,{nextField(direction)},curPos)
+goto(loop)
+end:
+leon.adventure.path = path
+executesync("leon.adventure:refine path")
+executesync("turbo stop")
+wait(0.0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
