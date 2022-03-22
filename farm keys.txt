@@ -12,5 +12,8 @@ gotoif(end, adventure.keys() > 10 || (((curPos != 9) && (curPos != 189)) && ((cu
 adventure.move({move(ternary.string(curPos==9,"D",ternary.string(curPos==171,"L",ternary.string(curPos==189,"R","U"))))})
 wait(leon.adventure.delay)
 executesync("leon.adventure:kill enemies")
+adventure.move({move(ternary.string(curPos==9,"U",ternary.string(curPos==171,"R",ternary.string(curPos==189,"L","D"))))})
+wait(leon.adventure.delay)
+executesync("leon.adventure:kill enemies")
 goto(start)
 end:
