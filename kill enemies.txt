@@ -28,13 +28,12 @@ loop1:
 executesync("turbo stop")
 gotoif(end,enemyCount==0)
 loop2:
-    gotoif(wait,{enemyDirection}=="W")
+    gotoif(attack,{enemyDirection}!="W")
+    adventure.wait()
+    goto(loop2)
+  attack:
     adventure.move({move({enemyDirection})})
     enemyCount-=1
-    goto(delay)
-    wait:
-    adventure.wait()
-    delay:
     wait(leon.adventure.delay)
   goto(ternary.int(enemyCount==0,start,loop2))
 end:
