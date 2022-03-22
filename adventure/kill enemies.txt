@@ -27,10 +27,11 @@ loop1:
   gotoif(loop1,curPos<361)
 executesync("turbo stop")
 gotoif(end,enemyCount==0)
-loop2:
-    gotoif(attack,{enemyDirection}!="W")
+goto(loop2)
+  wait:
     adventure.wait()
-    goto(loop2)
+  loop2:
+    gotoif(wait,{enemyDirection}=="W")
   attack:
     adventure.move({move({enemyDirection})})
     enemyCount-=1
