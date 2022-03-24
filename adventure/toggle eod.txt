@@ -1,0 +1,5 @@
+:global int leon.adventure.eod
+
+key.e()
+
+leon.adventure.eod = ternary.int(leon.adventure.eod == 1,0,1)
