@@ -1,5 +1,0 @@
-:global double leon.adventure.delay
-
-key.b()
-
-leon.adventure.delay = ternary.double(leon.adventure.delay > 0.15,0.1,0.2)
