@@ -4,5 +4,5 @@
 key.e()
 key.b()
 
-leon.adventure.eod = ternary.int(impulse()=="key.e()",leon.adventure.eod,ternary.int(leon.adventure.eod == 1,0,1))
-leon.adventure.delay = ternary.double(impulse()=="key.b()",leon.adventure.delay,ternary.double(leon.adventure.delay > 0.15,0.1,0.2))
+leon.adventure.eod = ternary.int(impulse()=="key.e",ternary.int(leon.adventure.eod == 1,0,1),leon.adventure.eod)
+leon.adventure.delay = ternary.double(impulse()=="key.b",ternary.double(leon.adventure.delay > 0.15,0.1,0.2),leon.adventure.delay)
