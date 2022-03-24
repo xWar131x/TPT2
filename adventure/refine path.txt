@@ -20,14 +20,17 @@
 #getCurrentEntity {getEntity({nextField({curDirection})})}
 #escapeDirection ternary.string(\
 			{getEntity({goUp(curPos)})} == "" && \
+			{getEntity({goUp({goUp(curPos)})})} == "" && \
     		(false == adventure.isWall({posToVec({goUp(curPos)})})) &&\
             {goUp(curPos)} != 351,\
         "BUUWDD",ternary.string(\
         	{getEntity({goDown(curPos)})}=="" && \
+			{getEntity({goDown({goDown(curPos)})})} == "" && \
     		(false == adventure.isWall({posToVec({goDown(curPos)})})) &&\
             {goDown(curPos)} != 9,\
         "BDDWUU",ternary.string(\
         	{getEntity({goLeft(curPos)})} == "" && \
+			{getEntity({goLeft({goLeft(curPos)})})} == "" && \
     		(false == adventure.isWall({posToVec({goLeft(curPos)})})) &&\
             {goLeft(curPos)} != 171,\
         "BLLWRR","BRRWLL")))
@@ -38,7 +41,7 @@ stepCount = 0
 path=leon.adventure.path
 loop:
 goto(ternary.int(stepCount>=len(path),end,ternary.int(\
-		{getCurrentEntity} == "Door"||{getCurrentEntity} == "Chest",door,\
+		{getCurrentEntity} == "Door",door,\
 	ternary.int({getCurrentEntity} == "Rock",rock,nextTile))))
 rock:        	
 	path = {insert(path,stepCount,ternary.string(leon.adventure.eod == 1,"BWWW",{escapeDirection}))}
