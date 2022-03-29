@@ -13,6 +13,7 @@ You can buy the armor at the beginning of the run.
 **This uses `turbo exec v2` to go faster but it is not necessary, found here: https://github.com/Xenos6666/TPT2_scripts/blob/main/common/turbo_exec/README.md**
 
 If you have the boots you can press the B key to speed up the walking.
+If you have the EOD armor you can press E to toggle tanking bombs.
 Higher FPS limits mean faster path finding if you don't use Turbo, and faster killing of enemies regardless fo turbo.
 
 ## Possible Improvements
