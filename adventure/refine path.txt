@@ -45,7 +45,7 @@ goto(ternary.int(stepCount>=len(path),end,ternary.int(\
 	ternary.int({getCurrentEntity} == "Rock",rock,nextTile))))
 rock:        	
 	path = {insert(path,stepCount,ternary.string(leon.adventure.eod == 1,"BWWW",{escapeDirection}))}
-	stepCount+=6
+	stepCount+=ternary.int(leon.adventure.eod==1,4,6)
 	goto(nextTile)
 door:
 	path={insert(path,stepCount,{curDirection})}
@@ -56,4 +56,5 @@ nextTile:
     goto(loop)
 end:
 	leon.adventure.path = path
+    wait(0.)
     

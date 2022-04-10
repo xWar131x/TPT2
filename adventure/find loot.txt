@@ -1,4 +1,7 @@
 :global int leon.adventure.target_pos
+:global int turbo.cycles.max
+:global int turbo.cycles
+:global int leon.adventure.running
 
 :local int curPos
 :local string queue
@@ -17,7 +20,7 @@
 #goDown a.i(curPos,"-",19)
 #distance(x,y) ({x}%19)-({y}%19)+({x}/19)-({y}/19)
 start:
-executesync("turbo start")
+turbo.cycles.max = max(turbo.cycles.max, turbo.cycles + 4000)
 queue = {posToString(d2i(x(adventure.playerPos()))+a.i(19,"*",d2i(y(adventure.playerPos()))))}
 lookedTheoretically=""
 loop1:
@@ -50,11 +53,9 @@ loop1:
   goto(ternary.int(len(queue)>0,loop1,end))
 foundChest:
     checkedPhysically = concat(checkedPhysically,{posToString(curPos)})
-    executesync("turbo stop")
     leon.adventure.target_pos = curPos
     executesync("leon.adventure:find path")
     executesync("leon.adventure:follow path")
-    goto(start)
+    gotoif(start,leon.adventure.running==1)
 end:
-executesync("turbo stop")
 wait(0.)

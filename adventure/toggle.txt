@@ -1,8 +1,9 @@
 :global int leon.adventure.eod
-:global double leon.adventure.delay
+:global int leon.adventure.max_difficulty
 
 key.e()
-key.b()
-
+key.w()
+key.s()
 leon.adventure.eod = ternary.int(impulse()=="key.e",ternary.int(leon.adventure.eod == 1,0,1),leon.adventure.eod)
-leon.adventure.delay = ternary.double(impulse()=="key.b",ternary.double(leon.adventure.delay > 0.15,0.1,0.2),leon.adventure.delay)
+leon.adventure.max_difficulty = leon.adventure.max_difficulty + ternary.int(impulse()=="key.w",1,ternary.int(impulse()=="key.s",-1,0))
+wait(0.)

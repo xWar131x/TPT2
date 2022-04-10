@@ -1,6 +1,8 @@
 :global string leon.adventure.room_direction
 :global int leon.adventure.target_pos
 :global double leon.adventure.delay
+:global int leon.adventure.max_difficulty
+:global string leon.adventure.path
 
 #xMove(d) ternary.double({d}=="L",-1.,ternary.double({d}=="R",1.,0.))
 #yMove(d) ternary.double({d}=="U",1.,ternary.double({d}=="D",-1.,0.))
@@ -25,15 +27,16 @@ executesync("leon.adventure:farm keys")
 executesync("leon.adventure:find loot")
 leon.adventure.room_direction = ternary.string( \
 	{cur_difficulty}==0 && len(leon.adventure.room_direction)>0,{rotateLeft(leon.adventure.room_direction)}\
-    ,ternary.string(i2d(adventure.playerAttack()) >= round(i2d({cur_difficulty}+1)*0.38+1.)+round(i2d({cur_difficulty}+1)*0.08) \
-    || i2d(adventure.playerArmor()) >= ceil(i2d({cur_difficulty}+1)*0.39) \
+    ,ternary.string((i2d(adventure.playerAttack()) >= round(i2d({cur_difficulty}+1)*0.38+1.)+round(i2d({cur_difficulty}+1)*0.08) \
+    || i2d(adventure.playerArmor()) >= ceil(i2d({cur_difficulty}+1)*0.39))&& \
+    leon.adventure.max_difficulty >= ({cur_difficulty}+1)\
     ,{rotateLeft({nextRoomLower})},{nextRoomLower}))
 
 leon.adventure.target_pos = ternary.int(leon.adventure.room_direction=="U",351,\
 	ternary.int(leon.adventure.room_direction=="L",171,\
     ternary.int(leon.adventure.room_direction=="R",189,9)))
 executesync("leon.adventure:find path")
+leon.adventure.path=concat(leon.adventure.path,leon.adventure.room_direction)
 executesync("leon.adventure:follow path")
-adventure.move({move(leon.adventure.room_direction)})
-wait(leon.adventure.delay)
 end:
+wait(0.)

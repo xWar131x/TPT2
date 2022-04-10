@@ -1,0 +1,5 @@
+key.k()
+executesync("turbo start")
+executesync("leon.adventure:kill enemies")
+executesync("turbo stop")
+wait(0.);

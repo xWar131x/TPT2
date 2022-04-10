@@ -3,22 +3,27 @@
 :global int leon.adventure.target_pos
 :global string leon.adventure.path
 :global int leon.adventure.eod
-
+:global int leon.adventure.running
+:global int leon.adventure.max_difficulty
 
 key.r()
 
 isopen("arcade")
-leon.adventure.delay = 0.2 ;no boots 0.1 for boots
+gotoif(stop,leon.adventure.running != 0)
+executesync("turbo start")
 leon.adventure.eod = 0 ;1 if eod has been found
+leon.adventure.max_difficulty = 128
 gis("<size=0>leon.adventure",0)
+leon.adventure.running = 1
 leon.adventure.room_direction = ""
 leon.adventure.target_pos = 0
 leon.adventure.path = ""
 gss("---Stop hiding---", "</size=0>")
 loop:
 executesync("leon.adventure:clear room")
-goto(loop)
-
-
-
+gotoif(loop,leon.adventure.running==1)
+executesync("turbo stop")
+stop:
+leon.adventure.running = 0
+wait(0.)
 

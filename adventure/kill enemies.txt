@@ -1,8 +1,18 @@
-:global double leon.adventure.delay
-
-:local int curPos
-:local int enemyCount
-
+#enemies_alive ({lua(local positions = {} \
+					local counter = 1 \
+					for x=1,17,1 do \
+						for y=1,17,1 do \
+                        	if not(x%2==0 and y%2==0) then \
+                            	positions[counter]="adventure.isEnemy(vec("..x..".,"..y..".))" \
+								counter = counter + 1 \
+                            end \
+                        end \
+                    end \
+					positions[counter]="adventure.isEnemy(vec(0.,9.))" \
+					positions[counter+1]="adventure.isEnemy(vec(9.,0.))" \
+					positions[counter+2]="adventure.isEnemy(vec(9.,18.))" \
+					positions[counter+3]="adventure.isEnemy(vec(18.,9.))" \
+                    return table.concat(positions,"||") )})
 #xMove(d) ternary.double({d}=="L",-1.,ternary.double({d}=="R",1.,0.))
 #yMove(d) ternary.double({d}=="U",1.,ternary.double({d}=="D",-1.,0.))
 #move(d) vec({xMove({d})},{yMove({d})})
@@ -16,29 +26,19 @@
 	ternary.string(adventure.isEnemy({posToVec({goRight({playerPos})})}),"R",\
     ternary.string(adventure.isEnemy({posToVec({goDown({playerPos})})}),"D",\
     ternary.string(adventure.isEnemy({posToVec({goLeft({playerPos})})}),"L","W"))))
+
+
 start:
-curPos=0
-executesync("turbo start")
-loop1:
-    gotoif(none,false==adventure.isEnemy({posToVec(curPos)}))
-    enemyCount += 1
-    none:
-    curPos+=1
-  gotoif(loop1,curPos<361)
-executesync("turbo stop")
-gotoif(end,enemyCount==0)
-goto(loop2)
-  wait:
-    adventure.wait()
-  loop2:
+gotoif(end,false == {enemies_alive})
+wait:
+	executesync("turbo stop")
+	adventure.wait()
+	executesync("turbo start")
     gotoif(wait,{enemyDirection}=="W")
-  attack:
-    adventure.move({move({enemyDirection})})
-    enemyCount-=1
-    wait(leon.adventure.delay)
-  goto(ternary.int(enemyCount==0,start,loop2))
+attack:
+	executesync("turbo stop")
+	adventure.move({move({enemyDirection})})
+	executesync("turbo start")
+	goto(ternary.int({enemyDirection}!="W",attack,start))
 end:
-
-
-
-
+wait(0.)
