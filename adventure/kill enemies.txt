@@ -27,9 +27,14 @@
     ternary.string(adventure.isEnemy({posToVec({goDown({playerPos})})}),"D",\
     ternary.string(adventure.isEnemy({posToVec({goLeft({playerPos})})}),"L","W"))))
 
+key.k()
 
+isopen("arcade")
+
+gotoif(start,impulse()!="key.k")
+executesync("turbo start")
 start:
-gotoif(end,false == {enemies_alive})
+goto(ternary.int({enemies_alive},wait,ternary.int(impulse()=="key.k",stop,end)))
 wait:
 	executesync("turbo stop")
 	adventure.wait()
@@ -40,5 +45,7 @@ attack:
 	adventure.move({move({enemyDirection})})
 	executesync("turbo start")
 	goto(ternary.int({enemyDirection}!="W",attack,start))
+stop:
+	executesync("turbo stop")
 end:
 wait(0.)

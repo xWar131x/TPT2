@@ -1,9 +1,0 @@
-:global int leon.adventure.eod
-:global int leon.adventure.max_difficulty
-
-key.e()
-key.w()
-key.s()
-leon.adventure.eod = ternary.int(impulse()=="key.e",ternary.int(leon.adventure.eod == 1,0,1),leon.adventure.eod)
-leon.adventure.max_difficulty = leon.adventure.max_difficulty + ternary.int(impulse()=="key.w",1,ternary.int(impulse()=="key.s",-1,0))
-wait(0.)

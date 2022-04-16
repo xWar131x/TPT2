@@ -1,29 +1,44 @@
 :global double leon.adventure.delay
-:global string leon.adventure.room_direction
 :global int leon.adventure.target_pos
 :global string leon.adventure.path
 :global int leon.adventure.eod
 :global int leon.adventure.running
-:global int leon.adventure.max_difficulty
+:global int leon.adventure.maxDifficulty
+:global string leon.adventure.targetPositions
+:local int maxDifficultyInit
 
 key.r()
+key.i()
 
 isopen("arcade")
-gotoif(stop,leon.adventure.running != 0)
+
+
+#abs(x) ternary.int({x}>=0,{x},0-{x})
+#room_x d2i(x(adventure.roomCoords()) - 127.0)
+#room_y d2i(y(adventure.roomCoords()) - 127.0)
+#difficulty(x,y) {abs({x})} + {abs({y})}
+#cur_difficulty {difficulty({room_x},{room_y})}
+
+maxDifficultyInit = 81
+leon.adventure.maxDifficulty = ternary.int(impulse()=="key.i",maxDifficultyInit,ternary.int(leon.adventure.maxDifficulty == 0,maxDifficultyInit,leon.adventure.maxDifficulty))
+
+goto(ternary.int(impulse()=="key.i",end,ternary.int(leon.adventure.running != 0,stop,start)))
+start:
 executesync("turbo start")
-leon.adventure.eod = 0 ;1 if eod has been found
-leon.adventure.max_difficulty = 128
 gis("<size=0>leon.adventure",0)
+leon.adventure.eod = 0
 leon.adventure.running = 1
-leon.adventure.room_direction = ""
 leon.adventure.target_pos = 0
 leon.adventure.path = ""
+leon.adventure.targetPositions = ""
 gss("---Stop hiding---", "</size=0>")
 loop:
 executesync("leon.adventure:clear room")
+leon.adventure.maxDifficulty = leon.adventure.maxDifficulty + ternary.int({cur_difficulty}>=leon.adventure.maxDifficulty && adventure.isCompleted(adventure.roomCoords()),2,0)
 gotoif(loop,leon.adventure.running==1)
 executesync("turbo stop")
 stop:
 leon.adventure.running = 0
+end:
 wait(0.)
 

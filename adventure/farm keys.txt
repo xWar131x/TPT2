@@ -1,4 +1,3 @@
-:global double leon.adventure.delay
 :global string leon.adventure.path
 :global int leon.adventure.running
 

@@ -1,5 +1,4 @@
 :global string leon.adventure.path
-:global double leon.adventure.delay
 :global int leon.adventure.running
 
 :local int stepCount
@@ -29,9 +28,9 @@ move:
 	curPos = {playerPos}
     status = {status}
     move2:
-	executesync("turbo stop")
-    adventure.move({nextMove})
-    executesync("turbo start")
+      executesync("turbo stop")
+      adventure.move({nextMove})
+      executesync("turbo start")
   goto(ternary.int(curPos!={playerPos}||status!={status},loop,move2))
 bomb:
 	executesync("turbo stop")
