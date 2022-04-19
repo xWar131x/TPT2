@@ -4,7 +4,7 @@
 :global int leon.adventure.eod
 :global string leon.adventure.targetPositions
 
-:local string leon.adventure.room_direction
+:global string leon.adventure.room_direction
 
 #xMove(d) ternary.double({d}=="L",-1.,ternary.double({d}=="R",1.,0.))
 #yMove(d) ternary.double({d}=="U",1.,ternary.double({d}=="D",-1.,0.))

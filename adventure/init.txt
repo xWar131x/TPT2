@@ -5,6 +5,7 @@
 :global int leon.adventure.running
 :global int leon.adventure.maxDifficulty
 :global string leon.adventure.targetPositions
+:global string leon.adventure.room_direction
 :local int maxDifficultyInit
 
 key.r()
@@ -19,6 +20,7 @@ isopen("arcade")
 #difficulty(x,y) {abs({x})} + {abs({y})}
 #cur_difficulty {difficulty({room_x},{room_y})}
 
+
 maxDifficultyInit = 81
 leon.adventure.maxDifficulty = ternary.int(impulse()=="key.i",maxDifficultyInit,ternary.int(leon.adventure.maxDifficulty == 0,maxDifficultyInit,leon.adventure.maxDifficulty))
 
@@ -31,6 +33,7 @@ leon.adventure.running = 1
 leon.adventure.target_pos = 0
 leon.adventure.path = ""
 leon.adventure.targetPositions = ""
+leon.adventure.room_direction = ""
 gss("---Stop hiding---", "</size=0>")
 loop:
 executesync("leon.adventure:clear room")
