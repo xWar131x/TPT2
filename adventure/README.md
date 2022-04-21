@@ -33,6 +33,7 @@ EOD moed will automatically enable once you reach difficulty 50, you starg getti
 | 8 | 97 | 38 |
 | 9 | 125 | 49 |
 | 10 | 128 | 50 |
+
  The AI probably breaks at or past difficulty 128 as the room grid runs out. 
 
 ## Usage
